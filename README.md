@@ -90,7 +90,7 @@ An illuminated archive of fundamental structural STCs (Standard Template Constru
 
 - [X] **Insertion Sort** — `O(N²)` time | `O(1)` space
 
-- [ ] **Selection Sort** — `O(N²)` time | `O(1)` space
+- [x] **Selection Sort** — `O(N²)` time | `O(1)` space
 
 - [ ] **Merge Sort** — `O(N log N)` time | `O(N)` space *(Regimented splitting and merging)*
 
