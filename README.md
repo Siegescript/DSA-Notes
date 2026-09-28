@@ -88,7 +88,7 @@ An illuminated archive of fundamental structural STCs (Standard Template Constru
 
 - [x] **Bubble Sort** — `O(N²)` time | `O(1)` space *(Frowned upon by the Tech-Priests)*
 
-- [ ] **Insertion Sort** — `O(N²)` time | `O(1)` space
+- [X] **Insertion Sort** — `O(N²)` time | `O(1)` space
 
 - [ ] **Selection Sort** — `O(N²)` time | `O(1)` space
 
