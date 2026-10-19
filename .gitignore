@@ -1,29 +1,13 @@
-# Executables & Binaries
-*.exe
-*.out
-*.app
-bin/
-build/
+# Ignore all files by default
+*
 
-# Object Files & Libraries
-*.o
-*.obj
-*.a
-*.so
-*.dylib
+# Do not ignore directories
+!*/
 
-# Debug Information
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Editor & OS Files
-.vscode/
-.DS_Store
-Thumbs.db
-
-# Dynamic Data/Input Files
-*.txt
-*.dat
-*.log
+# Whitelist source code and documentation
+!*.c
+!*.cpp
+!*.h
+!*.hpp
+!*.md
+!.gitignore
