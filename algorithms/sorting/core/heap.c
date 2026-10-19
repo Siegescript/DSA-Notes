@@ -1,95 +1,96 @@
 #include<stdio.h>
 
-// Time: best - n log(n), average - n log(n), worst - n log(n)
-// Space: 1
-// Unstable
-void heapSort(int[], int);
-void heapify(int[], int, int);
+// Time Complexity: Best: O(n log n), Average: O(n log n), Worst: O(n log n)
+// Space Complexity: O(1) auxiliary space
+// Stability: Unstable
+typedef int ElementType;
 
-void swap(int*, int*);
-void printArray(int[], int);
+// Core API
+void heapSort(ElementType arr[], int size);
 
-int main()
-{
-    int small_array[] = {12, 16, 20, 16, 11, 16, 5, 11, 1, 13};
-    int large_array[] = {
-        77, 97, 38, 82, 78, 47, 3, 82, 56, 80,
-        24, 15, 100, 25, 92, 20, 43, 23, 87, 65,
-        96, 55, 94, 85, 53, 5, 99, 29, 69, 12,
-        41, 3, 45, 53, 90, 11, 59, 7, 13, 70,
-        23, 26, 10, 79, 72, 26, 59, 79, 22, 87,
-        84, 44, 23, 13, 15, 61, 37, 1, 34, 27,
-        6, 52, 71, 53, 40, 58, 66, 70, 23, 68,
-        14, 14, 98, 25, 91, 82, 7, 41, 84, 28,
-        77, 72, 91, 45, 46, 2, 80, 41, 94, 60,
-        33, 70, 26, 95, 30, 74, 8, 94, 50, 74
+// Internal Helpers (Refer to max_heap.c)
+static void heapify(ElementType arr[], int size, int index);
+static void swap(ElementType *a, ElementType *b);
+
+// Utility
+void printArray(const ElementType arr[], int size);
+
+int main(void) {
+    ElementType small_array[] = {9, 1, 10, 3, 2, 8, 4, 6, 5, 7};
+    ElementType large_array[] = {
+        77, 20, 31, 74, 49, 98, 16, 94,  8, 48,
+        51,  5, 23, 88, 52, 34, 68, 37, 90, 100,
+        41, 44,  2, 46, 61, 53, 14, 32, 36, 22,
+        54, 59, 72,  4, 43, 10, 40,  7, 89,  6,
+        99, 29, 56,  3, 30, 39, 21,  1, 75, 83,
+        95, 63, 35, 38, 45, 50, 85, 81, 26, 60,
+        80, 78, 76, 55, 19, 11, 69,  9, 71, 96,
+        28, 24, 15, 73, 64, 97, 67, 79, 84, 62,
+        57, 91, 27, 58, 65, 70, 13, 18, 93, 12,
+        66, 17, 25, 92, 33, 47, 82, 42, 87, 86
     };
 
     int size_small = sizeof(small_array) / sizeof(small_array[0]);
     int size_large = sizeof(large_array) / sizeof(large_array[0]);
 
+    printf("--- Small Array (Unsorted) ---\n");
     printArray(small_array, size_small);
-    printf("\n");
+    
     heapSort(small_array, size_small);
+    
+    printf("\n--- Small Array (Sorted via HeapSort) ---\n");
     printArray(small_array, size_small);
+
+    printf("\n--- Large Array (Sorted via HeapSort) ---\n");
+    heapSort(large_array, size_large);
+    printArray(large_array, size_large);
 
     return 0;
 }
 
-void heapSort(int arr[], int size)
-{
-    int temp;
-    for(int i = size / 2 - 1; i >= 0; i--)
-    {
+void heapSort(ElementType arr[], int size) {
+    // 1. Build Max-Heap (bottom-up heapify starting at last parent node)
+    for (int i = (size / 2) - 1; i >= 0; i--) {
         heapify(arr, size, i);
     }
-  
-    for(int i = size - 1; i > 0; i--)
-    {
-        swap(&arr[0], &arr[i]);
-        heapify(arr, i, 0);
+
+    // 2. Extract max element repeatedly and place at the end of the array
+    for (int i = size - 1; i > 0; i--) {
+        swap(&arr[0], &arr[i]); // Move root (current max) to end
+        heapify(arr, i, 0);     // Restore heap property on reduced heap size
     }
 }
 
-void heapify(int Heap[], int size, int i)
-{
-    int root = i;
+static void heapify(ElementType arr[], int size, int i) {
+    int maxIndex = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
-    int temp;
 
-    if(left < size && Heap[left] > Heap[root])
-    {
-        root = left;
+    if (left < size && arr[left] > arr[maxIndex]) {
+        maxIndex = left;
     }
 
-    if(right < size && Heap[right] > Heap[root])
-    {
-        root = right;
+    if (right < size && arr[right] > arr[maxIndex]) {
+        maxIndex = right;
     }    
 
-    if(root != i) 
-    {
-        swap(&Heap[i], &Heap[root]);
-        heapify(Heap, size, root);
+    if(maxIndex != i) {
+        swap(&arr[i], &arr[maxIndex]);
+        heapify(arr, size, maxIndex);
     }
 }
 
-void swap(int *A, int *B)
-{
-    int tmp = *A;
-    *A = *B;
-    *B = tmp;
+static void swap(ElementType *a, ElementType *b) {
+    ElementType tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
-void printArray(int arr[], int size)
-{
+void printArray(const ElementType arr[], int size) {
     printf("{");
-    for(int n = 0; n < size; n++)
-    {
+    for (int n = 0; n < size; n++) {
         printf("%d", arr[n]);
-        if(n < size-1)
-        {
+        if (n < size - 1) {
             printf(", ");
         }
     }
