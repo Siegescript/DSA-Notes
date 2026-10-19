@@ -1,66 +1,98 @@
 #include<stdio.h>
 
-// Time: best - n log(n), average - n log(n), worst - n^2
-// Space: log(n) or n
-// Unstable
-void quickSort(int[], int, int);
-int partitionLomuto(int[], int, int);
-int partitionHoare(int[], int, int);
+// Time Complexity: Best: O(n log n), Average: O(n log n), Worst: O(n^2)
+// Space Complexity: O(log n) auxiliary stack space
+// Stability: Unstable
+typedef int ElementType;
 
-void swap(int*, int*);
-void printArray(int[], int);
+// Core API
+void quickSortHoare(ElementType arr[], int start, int end);
+void quickSortLomuto(ElementType arr[], int start, int end);
 
-int main()
-{
-    int small_array[] = {12, 16, 20, 16, 11, 16, 5, 11, 1, 13};
-    int large_array[] = {
-        77, 97, 38, 82, 78, 47, 3, 82, 56, 80,
-        24, 15, 100, 25, 92, 20, 43, 23, 87, 65,
-        96, 55, 94, 85, 53, 5, 99, 29, 69, 12,
-        41, 3, 45, 53, 90, 11, 59, 7, 13, 70,
-        23, 26, 10, 79, 72, 26, 59, 79, 22, 87,
-        84, 44, 23, 13, 15, 61, 37, 1, 34, 27,
-        6, 52, 71, 53, 40, 58, 66, 70, 23, 68,
-        14, 14, 98, 25, 91, 82, 7, 41, 84, 28,
-        77, 72, 91, 45, 46, 2, 80, 41, 94, 60,
-        33, 70, 26, 95, 30, 74, 8, 94, 50, 74
+// Internal Helpers
+static int partitionHoare(ElementType arr[], int start, int end);
+static int partitionLomuto(ElementType arr[], int start, int end);
+static void swap(ElementType *a, ElementType *b);
+
+// Utility
+void printArray(const ElementType arr[], int size);
+
+int main(void) {
+    ElementType small_array[] = {9, 1, 10, 3, 2, 8, 4, 6, 5, 7};
+    ElementType large_array[] = {
+        77, 20, 31, 74, 49, 98, 16, 94,  8, 48,
+        51,  5, 23, 88, 52, 34, 68, 37, 90, 100,
+        41, 44,  2, 46, 61, 53, 14, 32, 36, 22,
+        54, 59, 72,  4, 43, 10, 40,  7, 89,  6,
+        99, 29, 56,  3, 30, 39, 21,  1, 75, 83,
+        95, 63, 35, 38, 45, 50, 85, 81, 26, 60,
+        80, 78, 76, 55, 19, 11, 69,  9, 71, 96,
+        28, 24, 15, 73, 64, 97, 67, 79, 84, 62,
+        57, 91, 27, 58, 65, 70, 13, 18, 93, 12,
+        66, 17, 25, 92, 33, 47, 82, 42, 87, 86
     };
 
     int size_small = sizeof(small_array) / sizeof(small_array[0]);
     int size_large = sizeof(large_array) / sizeof(large_array[0]);
 
-    printArray(large_array, size_large);
-    printf("\n");
-    quickSort(large_array, 0, size_large - 1);
+    printf("--- Small Array (QuickSort via Lomuto) ---\n");
+    printArray(small_array, size_small);
+    quickSortLomuto(small_array, 0, size_small - 1);
+    printArray(small_array, size_small);
+
+    printf("\n--- Large Array (QuickSort via Hoare) ---\n");
+    quickSortHoare(large_array, 0, size_large - 1);
     printArray(large_array, size_large);
 
     return 0;
 }
 
-void quickSort(int arr[], int start, int end)
-{
-    int pivot;
-
-    if(start < end)
-    {
-        // pivot = partitionLomuto(arr, start, end);
-        pivot = partitionHoare(arr, start, end); 
-        quickSort(arr, start, pivot);
-        // quickSort(arr, start, pivot - 1);
-        quickSort(arr, pivot + 1, end);
+void quickSortHoare(ElementType arr[], int start, int end) {
+    if (start < end) {
+        int pivot = partitionHoare(arr, start, end);
+        quickSortHoare(arr, start, pivot);     // Note: includes pivot index
+        quickSortHoare(arr, pivot + 1, end);
     }
 }
 
-int partitionLomuto(int arr[], int start, int end)
-{
-    int pivot = arr[end];
+void quickSortLomuto(ElementType arr[], int start, int end) {
+    if (start < end) {
+        int pivot = partitionLomuto(arr, start, end);
+        quickSortLomuto(arr, start, pivot - 1); // Note: excludes pivot index
+        quickSortLomuto(arr, pivot + 1, end);
+    }
+}
+
+static int partitionHoare(ElementType arr[], int start, int end) {
+    ElementType pivot = arr[start];
+    int i = start - 1;
+    int j = end + 1;
+
+    while (1) {
+        do {
+            i++;
+        } while (arr[i] < pivot);
+
+        do {
+            j--;
+        } while (arr[j] > pivot);
+
+        if (i >= j) {
+            return j;
+        }
+
+        swap(&arr[i], &arr[j]);
+    }
+}
+
+static int partitionLomuto(ElementType arr[], int start, int end) {
+    ElementType pivot = arr[end];
     int i = start - 1;
 
-    for(int j = start; j <= end - 1; j++)
-    {
-        if(arr[j] < pivot)
-        {
-            swap(&arr[++i], &arr[j]);
+    for (int j = start; j <= end - 1; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
         }
     }
     i++;
@@ -69,49 +101,17 @@ int partitionLomuto(int arr[], int start, int end)
     return i;
 }
 
-int partitionHoare(int arr[], int start, int end)
-{
-    int pivot = arr[start];
-    int i = start - 1, j = end + 1;
-
-    while(1)
-    {
-        do 
-        {
-            i++;
-        } 
-        while(arr[i] < pivot);
-
-        do 
-        {
-            j--;
-        } 
-        while(arr[j] > pivot);
-
-        if(i >= j)
-        {
-            return j;
-        }
-
-        swap(&arr[i], &arr[j]);
-    }
+static void swap(ElementType *a, ElementType *b) {
+    ElementType tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
 
-void swap(int *A, int *B)
-{
-    int tmp = *A;
-    *A = *B;
-    *B = tmp;
-}
-
-void printArray(int arr[], int size)
-{
+void printArray(const ElementType arr[], int size) {
     printf("{");
-    for(int n = 0; n < size; n++)
-    {
+    for (int n = 0; n < size; n++) {
         printf("%d", arr[n]);
-        if(n < size-1)
-        {
+        if (n < size - 1) {
             printf(", ");
         }
     }
