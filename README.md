@@ -92,11 +92,11 @@ An illuminated archive of fundamental structural STCs (Standard Template Constru
 
 - [x] **Selection Sort** — `O(N²)` time | `O(1)` space
 
-- [ ] **Merge Sort** — `O(N log N)` time | `O(N)` space *(Regimented splitting and merging)*
+- [x] **Merge Sort** — `O(N log N)` time | `O(N)` space *(Regimented splitting and merging)*
 
-- [ ] **Quick Sort** — `O(N log N)` avg time | `O(log N)` space *(The Emperor's Swift Judgement)*
+- [x] **Quick Sort** — `O(N log N)` avg time | `O(log N)` space *(The Emperor's Swift Judgement)*
 
-- [ ] **Heap Sort** — `O(N log N)` time | `O(1)` space
+- [x] **Heap Sort** — `O(N log N)` time | `O(1)` space
 
 - [ ] **Counting Sort** — `O(N + K)` non-comparison sort *(Munitorum tallying)*
 
