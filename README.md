@@ -98,9 +98,9 @@ An illuminated archive of fundamental structural STCs (Standard Template Constru
 
 - [x] **Heap Sort** — `O(N log N)` time | `O(1)` space
 
-- [ ] **Counting Sort** — `O(N + K)` non-comparison sort *(Munitorum tallying)*
+- [x] **Counting Sort** — `O(N + K)` non-comparison sort *(Munitorum tallying)*
 
-- [ ] **Radix Sort** — `O(N · K)` digit-by-digit distribution sort
+- [x] **Radix Sort** — `O(N · K)` digit-by-digit distribution sort
 
 
 #### Apocryphal & Niche Rites
